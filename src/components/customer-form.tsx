@@ -11,11 +11,9 @@ import {
 } from "./ui/form";
 import { Input } from "./ui/input";
 import Customer from "@/model/customer";
-import { Dispatch, SetStateAction } from "react";
-
 interface CustomerFormProps {
   customer: Customer;
-  setCurrentView: Dispatch<SetStateAction<"form" | "table">>;
+  showTable: () => void;
   saveCustomer: (customer: Customer) => void;
 }
 
@@ -34,7 +32,7 @@ const formSchema = z.object({
 export const CustomerForm: React.FC<CustomerFormProps> = ({
   customer,
   saveCustomer,
-  setCurrentView,
+  showTable,
 }) => {
   //const form = useForm<z.infer<typeof formSchema>>({
   const form = useForm<CustomerFormProps["customer"]>({
@@ -49,7 +47,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
   const onSubmit = (values: Customer) => {
     const data = new Customer(values.name, values.age, customer.id);
     saveCustomer(data);
-    setCurrentView("table");
+    showTable();
   };
 
   return (
@@ -107,7 +105,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
           )}
         />
         <div className="flex gap-2 self-end">
-          <Button variant="secondary" onClick={() => setCurrentView("table")}>
+          <Button variant="secondary" onClick={() => showTable()}>
             Cancelar
           </Button>
           <Button type="submit">{customer.id ? "Alterar" : "Salvar"}</Button>
