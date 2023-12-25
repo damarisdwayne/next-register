@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import useCustomers from "@/hooks/use-customers";
 import { PlusIcon } from "lucide-react";
+import { useEffect } from "react";
 
 export default function Home() {
   const {
@@ -15,7 +16,12 @@ export default function Home() {
     saveCustomer,
     editCustomer,
     deleteCustomer,
+    getAll,
   } = useCustomers();
+
+  useEffect(() => {
+    getAll();
+  });
 
   return (
     <main className="flex items-center justify-center h-screen mx-6">
