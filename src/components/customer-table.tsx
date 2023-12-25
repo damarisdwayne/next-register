@@ -1,5 +1,5 @@
 import React from "react";
-import { Edit, Trash2Icon } from "lucide-react";
+import { Edit } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Customer from "@/model/customer";
+import { DeleteCustomerDialog } from "./delete-customer-dialog";
 
 interface CustomerTableProps {
   customers: Customer[];
@@ -21,7 +22,7 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
   editCustomer,
   deleteCustomer,
 }) => {
-  const showActions = editCustomer || deleteCustomer;
+  const showActions = customers?.length && (editCustomer || deleteCustomer);
   const renderHeader = () => {
     return (
       <TableRow>
@@ -30,7 +31,11 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
         </TableHead>
         <TableHead className="text-left">Nome</TableHead>
         <TableHead className="text-center">Idade</TableHead>
-        {showActions && <TableHead className="text-center">Ações</TableHead>}
+        {showActions ? (
+          <TableHead className="text-center">Ações</TableHead>
+        ) : (
+          false
+        )}
       </TableRow>
     );
   };
@@ -44,9 +49,9 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
           </button>
         )}
         {deleteCustomer && (
-          <button onClick={() => deleteCustomer(customer)}>
-            <Trash2Icon className="w-5 h-5 text-red-600 hover:text-red-600/50 transition-all duration-200" />
-          </button>
+          <DeleteCustomerDialog
+            deleteCustomer={() => deleteCustomer(customer)}
+          />
         )}
       </TableCell>
     );
@@ -62,10 +67,22 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
     ));
   };
 
+  const renderEmptyBody = () => {
+    return (
+      <TableRow>
+        <TableCell colSpan={4} className="text-center">
+          Nenhum cliente encontrado
+        </TableCell>
+      </TableRow>
+    );
+  };
+
   return (
     <Table>
       <TableHeader>{renderHeader()}</TableHeader>
-      <TableBody>{renderBody()}</TableBody>
+      <TableBody>
+        {customers.length ? renderBody() : renderEmptyBody()}
+      </TableBody>
     </Table>
   );
 };
