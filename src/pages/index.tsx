@@ -21,7 +21,7 @@ export default function Home() {
 
   useEffect(() => {
     getAll();
-  });
+  }, []);
 
   return (
     <main className="flex items-center justify-center h-screen mx-6">
